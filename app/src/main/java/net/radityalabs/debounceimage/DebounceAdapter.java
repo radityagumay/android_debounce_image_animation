@@ -29,7 +29,7 @@ public class DebounceAdapter extends RecyclerView.Adapter<DebounceViewHolder> {
     public void onBindViewHolder(DebounceViewHolder holder, int position) {
         holder.image.setForegroundImage(items.get(position).foreground);
         holder.image.setBackgroundImage(items.get(position).background);
-        holder.image.refreshView();
+        holder.image.refreshView(items.size(), position);
     }
 
     @Override

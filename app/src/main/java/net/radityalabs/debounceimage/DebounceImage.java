@@ -5,7 +5,6 @@ package net.radityalabs.debounceimage;
  */
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.IdRes;
@@ -23,11 +22,8 @@ import android.widget.ImageView;
 
 public class DebounceImage extends FrameLayout {
 
-    private Drawable mIcon;
-    private int mCircleImageSize;
-
-    private int mForegroundImage = -1;
-    private int mBackgroundImage = -1;
+    private int count, current, commonSize;
+    private int mForegroundImage = -1, mBackgroundImage = -1;
 
     private ImageView backgroundImageView;
     private CircleImageView circleImageView;
@@ -55,7 +51,12 @@ public class DebounceImage extends FrameLayout {
         mForegroundImage = resId;
     }
 
-    public void refreshView() {
+    public void refreshView(int count, int current) {
+        this.count = count;
+        this.current = current;
+
+        resizeCurrentView();
+
         if (mBackgroundImage != -1) {
             backgroundImageView.setImageResource(mBackgroundImage);
         }
@@ -64,26 +65,31 @@ public class DebounceImage extends FrameLayout {
         }
     }
 
+    private void resizeCurrentView() {
+        int center = Math.abs(count / 2);
+        if (count % 2 == 0) {
+            center += 1;
+        }
+        commonViewSize(commonSize - (commonSize / (center - current)));
+    }
+
     private float getDimension(@DimenRes int id) {
         return getResources().getDimension(id);
     }
 
+
     private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
-        LayoutInflater.from(getContext()).inflate(R.layout.debounce_image, this, true);
+        LayoutInflater.from(context).inflate(R.layout.debounce_image, this, true);
 
         backgroundImageView = (ImageView) findViewById(R.id.iv_bgframe);
         circleImageView = (CircleImageView) findViewById(R.id.iv_photo);
 
-        int size = getDpValueInt(mCircleImageSize);
-        setLayoutParams(new LayoutParams(size, size));
+        commonViewSize((int) getDimension(R.dimen.debounce_image_size));
+    }
 
-        /*TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.DebounceImage, 0, 0);
-        mBackgroundDrawable = attr.getDrawable(R.styleable.DebounceImage_backgroundHolder);
-        mPlaceHolder = attr.getResourceId(R.styleable.DebounceImage_placeHolder, 0);
-        mIcon = attr.getDrawable(R.styleable.DebounceImage_icon);
-        attr.recycle();
-
-        mCircleImageSize = (int) getDimension(R.dimen.debounce_image_size);*/
+    private void commonViewSize(int size) {
+        commonSize = getDpValueInt(size);
+        setLayoutParams(new LayoutParams(commonSize, commonSize));
     }
 
     private int getDpValueInt(int size) {
