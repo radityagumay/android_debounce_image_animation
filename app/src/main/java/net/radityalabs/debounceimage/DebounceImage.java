@@ -56,7 +56,7 @@ public class DebounceImage extends FrameLayout {
 
     public void refreshView(int count, int current) {
         this.count = count;
-        this.current = current;
+        this.current = current + 1;
 
         resizeCurrentView();
 
@@ -74,7 +74,11 @@ public class DebounceImage extends FrameLayout {
         if (current == center) {
             size = commonSize;
         } else {
-            size = commonSize - (commonSize / (center - current));
+            if (center > current) {
+                size = commonSize - (commonSize / (center - current));
+            } else {
+                size = commonSize - (commonSize / (current - center));
+            }
         }
         Log.d(TAG, "" + size + " position:" + current);
         setLayoutParams(new LayoutParams(size, size));

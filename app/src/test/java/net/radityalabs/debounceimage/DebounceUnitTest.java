@@ -9,7 +9,11 @@ import org.junit.Test;
 public class DebounceUnitTest {
 
     @Test
-    public void aabs() {
-        System.out.print(Math.abs(7 / 2));
+    public void euclidienTest() {
+        int current = 4;
+        int position = 3;
+
+        int e = current - position;
+        System.out.print(e);
     }
 }
