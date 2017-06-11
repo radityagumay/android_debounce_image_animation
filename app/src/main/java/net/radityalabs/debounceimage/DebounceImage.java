@@ -11,6 +11,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -22,11 +23,13 @@ import android.widget.ImageView;
 
 public class DebounceImage extends FrameLayout {
 
+    private static final String TAG = DebounceImage.class.getSimpleName();
+
     private int count, current, commonSize;
     private int mForegroundImage = -1, mBackgroundImage = -1;
 
-    private ImageView backgroundImageView;
     private CircleImageView circleImageView;
+    private ImageView backgroundImageView;
 
     public DebounceImage(@NonNull Context context) {
         super(context);
@@ -67,16 +70,19 @@ public class DebounceImage extends FrameLayout {
 
     private void resizeCurrentView() {
         int center = Math.abs(count / 2);
-        if (count % 2 == 0) {
-            center += 1;
+        int size;
+        if (current == center) {
+            size = commonSize;
+        } else {
+            size = commonSize - (commonSize / (center - current));
         }
-        commonViewSize(commonSize - (commonSize / (center - current)));
+        Log.d(TAG, "" + size + " position:" + current);
+        setLayoutParams(new LayoutParams(size, size));
     }
 
     private float getDimension(@DimenRes int id) {
         return getResources().getDimension(id);
     }
-
 
     private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         LayoutInflater.from(context).inflate(R.layout.debounce_image, this, true);
@@ -84,12 +90,7 @@ public class DebounceImage extends FrameLayout {
         backgroundImageView = (ImageView) findViewById(R.id.iv_bgframe);
         circleImageView = (CircleImageView) findViewById(R.id.iv_photo);
 
-        commonViewSize((int) getDimension(R.dimen.debounce_image_size));
-    }
-
-    private void commonViewSize(int size) {
-        commonSize = getDpValueInt(size);
-        setLayoutParams(new LayoutParams(commonSize, commonSize));
+        commonSize = (int) getDimension(R.dimen.debounce_image_size);
     }
 
     private int getDpValueInt(int size) {

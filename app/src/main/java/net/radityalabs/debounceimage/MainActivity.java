@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<Debounce> builder() {
-        List<Debounce> items = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) {
+        List<Debounce> items = new ArrayList<>(7);
+        for (int i = 0; i < 7; i++) {
             Debounce item = new Debounce();
             item.background = R.drawable.bg_no1;
             item.foreground = R.drawable.advisor_sample;
