@@ -58,7 +58,7 @@ public class DebounceImage extends FrameLayout {
         this.count = count;
         this.current = current;
 
-        resizeCurrentView();
+        //resizeCurrentView();
 
         if (mBackgroundImage != -1) {
             backgroundImageView.setImageResource(mBackgroundImage);
