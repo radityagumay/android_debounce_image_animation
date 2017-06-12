@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,10 +51,8 @@ public class MainActivity extends AppCompatActivity {
         items = new ArrayList<>();
         imageAdapter = new DebounceAdapter(items);
 
-        images.setItemAnimator(new DefaultItemAnimator());
         images.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         images.setAdapter(imageAdapter);
-        images.setClipToPadding(true);
         images.setHasFixedSize(true);
 
         items.addAll(builder());

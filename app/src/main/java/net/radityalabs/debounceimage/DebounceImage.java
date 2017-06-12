@@ -79,7 +79,7 @@ public class DebounceImage extends FrameLayout {
                 TranslateAnimation.RELATIVE_TO_PARENT, 0f,
                 TranslateAnimation.RELATIVE_TO_PARENT, 1.0f
         );
-        animation.setDuration(5000);
+        animation.setDuration(10000);
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.REVERSE);
         animation.setInterpolator(new LinearInterpolator());
