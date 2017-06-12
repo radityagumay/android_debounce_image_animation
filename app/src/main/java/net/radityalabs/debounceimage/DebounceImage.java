@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +26,7 @@ public class DebounceImage extends FrameLayout {
 
     private static final String TAG = DebounceImage.class.getSimpleName();
 
-    private int count, current, commonSize;
+    private int count, current, commonSize, backCommonSize;
     private int mForegroundImage = -1, mBackgroundImage = -1;
 
     private CircleImageView circleImageView;
@@ -58,7 +59,7 @@ public class DebounceImage extends FrameLayout {
         this.count = count;
         this.current = current;
 
-        //resizeCurrentView();
+        resizeCurrentView();
 
         if (mBackgroundImage != -1) {
             backgroundImageView.setImageResource(mBackgroundImage);
@@ -70,20 +71,33 @@ public class DebounceImage extends FrameLayout {
 
     private void resizeCurrentView() {
         int center = Math.abs(count / 2);
-        int size;
+        int backSize, foreSize;
         if (current == center) {
-            size = commonSize;
+            backSize = backCommonSize;
+            foreSize = commonSize;
         } else {
             if (center > current) {
-                Log.d(TAG, String.format("%s - (%s / (%s - %s))", commonSize, commonSize, center, current));
-                size = commonSize - (commonSize / (center - current));
+                int divider = center - current;
+                foreSize = commonSize / divider;
+                backSize = backCommonSize / divider;
             } else {
-                size = commonSize - (commonSize / (current - center));
-                Log.d(TAG, String.format("%s - (%s / (%s - %s))", commonSize, commonSize, current, center));
+                int divider = current - center;
+                foreSize = commonSize / divider;
+                backSize = backCommonSize / divider;
             }
+
+            if (foreSize == commonSize) {
+                foreSize -= 30;
+                backSize -= 30;
+            }
+
+            Log.d(TAG, String.format("%s %s / (%s - %s)", "Foreground", commonSize, current, center));
+            Log.d(TAG, String.format("%s %s / (%s - %s)", "Background", backCommonSize, current, center));
         }
-        Log.d(TAG, "" + size + " position:" + current);
-        setLayoutParams(new LayoutParams(size, size));
+        Log.d(TAG, "foreSize: " + foreSize + " backSize:" + backSize + " position:" + current);
+        backgroundImageView.setLayoutParams(new LayoutParams(backSize, backSize, Gravity.CENTER));
+        circleImageView.setLayoutParams(new LayoutParams(foreSize, foreSize, Gravity.CENTER));
+        setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
     }
 
     private float getDimension(@DimenRes int id) {
@@ -93,10 +107,11 @@ public class DebounceImage extends FrameLayout {
     private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         LayoutInflater.from(context).inflate(R.layout.debounce_image, this, true);
 
-        backgroundImageView = (ImageView) findViewById(R.id.iv_bgframe);
-        circleImageView = (CircleImageView) findViewById(R.id.iv_photo);
+        backgroundImageView = (ImageView) findViewById(R.id.iv_background);
+        circleImageView = (CircleImageView) findViewById(R.id.iv_foreground);
 
         commonSize = (int) getDimension(R.dimen.debounce_image_size);
+        backCommonSize = (int) getDimension(R.dimen.background_debounce_image_size);
     }
 
     private int getDpValueInt(int size) {

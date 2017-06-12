@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="debounce_image_size">56dp</dimen>
+    <dimen name="debounce_image_size">60dp</dimen>
+    <dimen name="background_debounce_image_size">100dp</dimen>
 </resources>
