@@ -12,7 +12,6 @@ public class DebounceUnitTest {
     public void euclidienTest() {
         int current = 4;
         int position = 3;
-
         int e = current - position;
         System.out.print(e);
     }
