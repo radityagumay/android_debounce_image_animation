@@ -11,10 +11,12 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -59,7 +61,8 @@ public class DebounceImage extends FrameLayout {
         this.count = count;
         this.current = current;
 
-        resizeCurrentView();
+        addResizeView();
+        addBounceAnimation();
 
         if (mBackgroundImage != -1) {
             backgroundImageView.setImageResource(mBackgroundImage);
@@ -69,7 +72,25 @@ public class DebounceImage extends FrameLayout {
         }
     }
 
-    private void resizeCurrentView() {
+    private Animation translateY() {
+        Animation animation = new TranslateAnimation(
+                TranslateAnimation.ABSOLUTE, 0f,
+                TranslateAnimation.ABSOLUTE, 0f,
+                TranslateAnimation.RELATIVE_TO_PARENT, 0f,
+                TranslateAnimation.RELATIVE_TO_PARENT, 1.0f
+        );
+        animation.setDuration(5000);
+        animation.setRepeatCount(-1);
+        animation.setRepeatMode(Animation.REVERSE);
+        animation.setInterpolator(new LinearInterpolator());
+        return animation;
+    }
+
+    private void addBounceAnimation() {
+        setAnimation(translateY());
+    }
+
+    private void addResizeView() {
         int center = Math.abs(count / 2);
         int backSize, foreSize;
         if (current == center) {
@@ -90,11 +111,7 @@ public class DebounceImage extends FrameLayout {
                 foreSize -= 30;
                 backSize -= 30;
             }
-
-            Log.d(TAG, String.format("%s %s / (%s - %s)", "Foreground", commonSize, current, center));
-            Log.d(TAG, String.format("%s %s / (%s - %s)", "Background", backCommonSize, current, center));
         }
-        Log.d(TAG, "foreSize: " + foreSize + " backSize:" + backSize + " position:" + current);
         backgroundImageView.setLayoutParams(new LayoutParams(backSize, backSize, Gravity.CENTER));
         circleImageView.setLayoutParams(new LayoutParams(foreSize, foreSize, Gravity.CENTER));
         setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
