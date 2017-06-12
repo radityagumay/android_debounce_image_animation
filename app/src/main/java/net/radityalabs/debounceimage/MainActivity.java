@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         rvImages.setItemAnimator(new DefaultItemAnimator());
         rvImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvImages.setHasFixedSize(true);
+        rvImages.setClipToPadding(true);
         rvImages.setItemViewCacheSize(7);
         rvImages.setAdapter(imageAdapter);
         items.addAll(builder());

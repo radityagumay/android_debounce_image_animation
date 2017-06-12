@@ -14,11 +14,13 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import java.util.Random;
 
 /**
  * Created by radityagumay on 6/8/17.
@@ -79,10 +81,10 @@ public class DebounceImage extends FrameLayout {
                 TranslateAnimation.RELATIVE_TO_PARENT, 0f,
                 TranslateAnimation.RELATIVE_TO_PARENT, 1.0f
         );
-        animation.setDuration(10000);
-        animation.setRepeatCount(-1);
+        animation.setDuration(new Random().nextInt(10000));
+        animation.setRepeatCount(Animation.INFINITE);
         animation.setRepeatMode(Animation.REVERSE);
-        animation.setInterpolator(new LinearInterpolator());
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
         return animation;
     }
 
