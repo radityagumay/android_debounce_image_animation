@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Debounce> items;
 
-    private RecyclerView images;
+    private RecyclerView rvImages;
     private DebounceAdapter imageAdapter;
 
     @Override
@@ -46,15 +45,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        images = (RecyclerView) findViewById(R.id.rv_image);
+        rvImages = (RecyclerView) findViewById(R.id.rv_image);
 
         items = new ArrayList<>();
         imageAdapter = new DebounceAdapter(items);
 
-        images.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        images.setAdapter(imageAdapter);
-        images.setHasFixedSize(true);
-
+        rvImages.setItemAnimator(new DefaultItemAnimator());
+        rvImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvImages.setHasFixedSize(true);
+        rvImages.setItemViewCacheSize(7);
+        rvImages.setAdapter(imageAdapter);
         items.addAll(builder());
         imageAdapter.notifyDataSetChanged();
     }
